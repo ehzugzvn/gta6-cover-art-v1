@@ -1,7 +1,22 @@
-// Fixed scenes for screenshots: ?shot=editor shows the page with a sample photo; ?shot=cover shows the cover alone.
-// `photo` picks the sample (samples/<photo>.jpg) and `caption` the words. window.__shotReady is set once painted.
-export async function runShot(shot, query, load) {
-  if (shot === 'cover') document.body.classList.add('shot-cover');
-  await load(`samples/${query.get('photo') ?? 'pier'}.jpg`, query.get('caption') ?? 'Sunset Heist');
-  requestAnimationFrame(() => requestAnimationFrame(() => { window.__shotReady = true; }));
+// Fixed scenes for screenshots, driven by the query string:
+//   ?shot=cover&size=landscape&grade=sunset&title=PALM%20HEAT
+//     &panels=convertible,supercar,neon,pier,harbour
+//   ?shot=editor&...  (same setup, but the editor stays visible)
+// Returns null when there is no ?shot= parameter, so normal use is untouched.
+export function shotConfig(query) {
+  const mode = query.get('shot');
+  if (!mode) return null;
+  const panels = (query.get('panels') || '').split(',').map((s) => s.trim()).filter(Boolean);
+  const zoomRaw = Number(query.get('zoom'));
+  return {
+    mode,
+    title: query.get('title'),
+    kicker: query.get('kicker'),
+    tagline: query.get('tagline'),
+    grade: query.get('grade'),
+    size: query.get('size'),
+    panels,
+    // Optional hero zoom (1..3) so a screenshot can push in on panel 1.
+    heroZoom: Number.isFinite(zoomRaw) && zoomRaw >= 1 && zoomRaw <= 3 ? zoomRaw : null,
+  };
 }

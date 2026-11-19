@@ -3,20 +3,66 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
+<title>Vice Sunset Studio — GTA-style Cover Maker</title>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
+  <aside class="controls">
+    <header class="brand">
+      <h1>Vice Sunset Studio</h1>
+      <p>Your photos + one bold caption = a five-panel street-saga cover.</p>
+    </header>
+
+    <section>
+      <h2>1 · Photos</h2>
+      <div id="strip" class="strip" aria-label="Photo strip"></div>
+      <label class="upload">Upload your own photos
+        <input id="upload" type="file" accept="image/*" multiple>
+      </label>
+      <div class="row">
+        <button id="fill" type="button">Fill all panels</button>
+        <button id="shuffle" type="button">Shuffle</button>
+        <button id="clear-panel" type="button">Clear panel</button>
+      </div>
+      <p id="selected-label" class="hint"></p>
+      <label class="slider">Zoom selected panel
+        <input id="zoom" type="range" min="1" max="3" step="0.01" value="1">
+      </label>
+    </section>
+
+    <section>
+      <h2>2 · Words</h2>
+      <label>Title <input id="title" type="text" maxlength="26" value="PALM HEAT"></label>
+      <label>Kicker badge <input id="kicker" type="text" maxlength="24" value="VICE COAST"></label>
+      <label>Tagline <input id="tagline" type="text" maxlength="44" value="LIVE FAST. STAY GOLDEN."></label>
+    </section>
+
+    <section>
+      <h2>3 · Colour grade</h2>
+      <div class="row" role="group" aria-label="Colour grade">
+        <button type="button" data-grade="sunset" class="active">Sunset</button>
+        <button type="button" data-grade="neon">Neon</button>
+        <button type="button" data-grade="pop">Clean Pop</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>4 · Size &amp; export</h2>
+      <div class="row" role="group" aria-label="Export size">
+        <button type="button" data-size="square">1080 × 1080</button>
+        <button type="button" data-size="portrait">1080 × 1350</button>
+        <button type="button" data-size="landscape" class="active">1920 × 1080</button>
+      </div>
+      <button id="export" type="button" class="export">Export PNG</button>
+      <p id="status" role="status" class="hint"></p>
+    </section>
+  </aside>
+
+  <section class="stage">
+    <canvas id="cover" width="1920" height="1080" aria-label="Live cover preview"></canvas>
+    <p class="hint">Live preview — click a panel to select it, drag its photo to reposition, or use keys 1–5, the arrow keys and +/−. One photo can star in several panels; five photos can share the poster. Export when it sings.</p>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>
